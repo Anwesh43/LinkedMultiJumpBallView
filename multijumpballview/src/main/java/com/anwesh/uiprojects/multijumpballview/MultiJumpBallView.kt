@@ -206,4 +206,13 @@ class MultiJumpBallView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : MultiJumpBallView {
+            val view : MultiJumpBallView = MultiJumpBallView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
