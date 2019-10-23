@@ -14,7 +14,7 @@ import android.graphics.Color
 
 val nodes : Int = 5
 val balls : Int = 3
-val scGap : Float = 0.02f
+val scGap : Float = 0.01f
 val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#f44336")
@@ -28,13 +28,13 @@ fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale
 fun Float.sinify() : Float = Math.sin(Math.PI * this).toFloat()
 
 fun Canvas.drawMultiJumpBall(scale : Float, size : Float, h : Float, paint : Paint) {
-    val gap : Float = size / (nodes - 1)
-    val r : Float = gap / rFactor
+    val gap : Float = size / (balls - 1)
+    val r : Float = size / rFactor
     drawLine(-size, 0f, size, 0f, paint)
     for (j in 0..(balls - 1)) {
         save()
-        translate(gap * j, 0f)
-        drawCircle(0f, -(h - r) * scale.divideScale(j, balls).sinify(), r, paint)
+        translate(-size / 2 + gap * j, -r)
+        drawCircle(0f, -(h - 2 * r) * scale.divideScale(j, balls).sinify(), r, paint)
         restore()
     }
 }
@@ -49,7 +49,7 @@ fun Canvas.drawMJBNode(i : Int, scale : Float, paint : Paint) {
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     save()
     translate(gap * (i + 1), h / 2)
-    drawMultiJumpBall(scale, size, h, paint)
+    drawMultiJumpBall(scale, size, h / 2, paint)
     restore()
 }
 
