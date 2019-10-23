@@ -183,4 +183,26 @@ class MultiJumpBallView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : MultiJumpBallView) {
+
+        private val animator : Animator = Animator(view)
+        private val mjb : MultiJumpBall = MultiJumpBall(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            mjb.draw(canvas, paint)
+            animator.animate {
+                mjb.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            mjb.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
