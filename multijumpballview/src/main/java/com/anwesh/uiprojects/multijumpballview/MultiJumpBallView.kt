@@ -19,8 +19,35 @@ val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#f44336")
 val backColor : Int = Color.parseColor("#BDBDBD")
+val rFactor : Float = 3.5f
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(Math.PI * this).toFloat()
+
+fun Canvas.drawMultiJumpBall(scale : Float, size : Float, h : Float, paint : Paint) {
+    val gap : Float = size / (nodes - 1)
+    val r : Float = gap / rFactor
+    drawLine(-size, 0f, size, 0f, paint)
+    for (j in 0..(balls - 1)) {
+        save()
+        translate(gap * j, 0f)
+        drawCircle(0f, -(h - r) * scale.divideScale(j, balls).sinify(), r, paint)
+        restore()
+    }
+}
+
+fun Canvas.drawMJBNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    paint.color = foreColor
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    save()
+    translate(gap * (i + 1), h / 2)
+    drawMultiJumpBall(scale, size, h, paint)
+    restore()
+}
